@@ -200,6 +200,11 @@ Can use conda to intall samtools to view the bam file to look at the structures.
 
 # Day 3: MacParland et al 2018
 
+## Requirements
+You may want to download and install the [loupe browser](https://www.10xgenomics.com/products/loupe-browser/downloads). This is a browser designed by 10X to visualise the results of the Cell Ranger analysis that we will conduct below. Alternatively, I will load it on my machine and you can see what it looks like that way.
+
+## Part XXX: Running cellranger bamtofastq
+
 TODO incorporate down sampling into this. If the students can down sample then they can work with their own sets of files and fully develop a Nextflow pipeline.
 
 The processing of single cell RNA-seq data differs from that of bulk RNA-seq data with regards to the programs that are used to process it. However, many of the underlying principles (i.e. mapping and counting) are shared between bulk and single cell RNA-seq.
@@ -231,11 +236,25 @@ As input, `cellranger count` takes fastq files. But we have bam files. Fortunate
 
 We won't run it on the actual data because that would take a lot of time and resources that we don't have available to us right now. Instead I've recreated the output files here: XXX
 
+## Part XXX: Running cellranger count
 Now that we have the fastq files we can run the `cellranger count` program to generate the count tables.
 
-> **Excercise XXX**: Run `cellranger  count` on one set of the fastq files.
+> **Excercise XXX**: Run `cellranger count` on one set of the fastq files.
 
+An explanation of the output files can be found [here](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/output/gex-outputs)
 
+> **Exercise XXX**: Examine the output of `cellranger count` and compare it to the above documentation.
 
+## Part XXX: Getting files in and out of the server
+Obviously, there will be many occasions where you want to either load files on to the server, or take files off of ther server.
 
+We will cover that now.
+
+The most common way to do this is using [scp](https://linuxize.com/post/how-to-use-scp-command-to-securely-transfer-files/) (secure copy).
+
+> **Exercise XXX**: Transfer the .html file that was generated to your local machines hard drive. Open it up.
+
+> **Exercise XXX**: If you installed the Loupe browser, open up the Loupe file on your local machine. If you didn't watch me!
+
+## Part XXX: Running cellranger aggr
 

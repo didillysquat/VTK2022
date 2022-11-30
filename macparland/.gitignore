@@ -1,0 +1,8 @@
+cellranger
+count_analysis
+download_run-READS_SUBMITTED.sh
+raw_reads
+results
+wor
+.nextflow*
+work
