@@ -4,6 +4,10 @@
 All code associated with the analysis of the MacParland dataset for the 2022 VTK
 */
 
+// TODO add in the container for cell ranger and run from there rather than being
+// reliant on the local version of cell ranger.
+
+
 sample_bams_ch = Channel.fromFilePairs("/home/humebc/VTK_22/macparland/raw_reads/**/*.bam{,.bai}")
 chromium_transcript_ref = file("/home/humebc/VTK_22/reference/refdata-gex-GRCh38-2020-A")
 
@@ -46,7 +50,7 @@ process count{
     tuple val(sample), path(fastqs) from fastqs_ch
 
     output:
-    tuple val(sample), path("${sample}") into count_out_ch
+    path "${sample}" into count_out_ch
     
     script:
     """
@@ -54,3 +58,26 @@ process count{
     """
 }
 
+// From here we need to run aggr to merge all of the individual cellranger count outputs into 
+// a single barcode/feature table
+
+// For this we first need to create an input csv table to provide to aggr
+process aggr{
+    tag "aggr"
+    cpus 200
+    publishDir "results/aggr"
+    container "nfcore/cellranger:7.0.0"
+
+    input:
+    path count_dirs from count_out_ch.collect()
+
+    output:
+    path "data.csv" into aggr_out_ch
+    
+    script:
+    """
+    echo "sample_id,molecule_h5" > data.csv
+    find -L ~+ -type f -name "molecule_info.h5" | awk -F '/' '{print \$(NF-2)","\$0}' >> data.csv
+    cellranger aggr --id macparland --csv data.csv --localcores ${task.cpus} --localmem 800
+    """
+}
