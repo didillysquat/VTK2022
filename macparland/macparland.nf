@@ -72,7 +72,7 @@ process aggr{
     path count_dirs from count_out_ch.collect()
 
     output:
-    path "data.csv" into aggr_out_ch
+    tuple path("macparland"), path("data.csv") into aggr_out_ch
     
     script:
     """
