@@ -4,7 +4,7 @@ practical related to the 2022 VTK Advanced Technologies for the Life Sciences.
 
 # Introduction
 In this practical we will process 2 RNA sequencing (RNA-seq) datasets
-to generate a selection of the analystical results presented in the two
+to generate a selection of the analytical results presented in the two
 papers associated with the datasets. One of the datasets is a bulk-RNA
 dataset while the other is a single cell RNA (scRNA-seq) dataset.
 
@@ -26,10 +26,10 @@ Both papers have been uploaded to the ILLIAS system in Publications/SequAna
 It would be a good idea to make yourself familiar with the papers before starting the practical work.
 
 ## Location
-The practical will take place in room M739 from 09.00-16.30 on the 6-8th of December. It is currently unclear whether we will have access to the room on the 9th of Decemeber as well.
+The practical will take place in room M739 from 09.00-16.30 on the 6-8th of December. It is currently unclear whether we will have access to the room on the 9th of December as well.
 
 Ben Hume, the current SequAna bioinformatician will
-be running the practical and there to assisst you.
+be running the practical and there to assist you.
 
 ## Computing setup
 You will need access to a computer to complete this practical.
@@ -39,31 +39,31 @@ this is a very inconvenient way to work as your home directory is
 deleted after every session and it is not possible to install
 applications that use Graphical User Interfaces (GUI).
 
-As such it is strongly recommened that you bring a laptop with
+As such it is strongly recommended that you bring a laptop with
 you to complete the practical. There will be 1 spare laptop
 available for use during the practical session in M739, but this
 laptop cannot leave the room as it belongs to SequAna.
 
 # Objectives
 
-The main objective of this practcal is to give you an introduction to the tools that are used by computational biologist/bioinformaticians to generate meaningful results from sequencing data.
+The main objective of this practical is to give you an introduction to the tools that are used by computational biologist/bioinformaticians to generate meaningful results from sequencing data.
 
 The objective of this course is not for you to become proficient or masterful of the techniques we will be covering (we have only 3 or 4 days!). Any proficiency gained, however, 
 will likely be extremely valuable to you in your career as a research scientist.
 
-To acheive this objective we will work with the sequencing data archived as part of the above mentioned stuies to recapitulate several of their key findings.
+To achieve this objective we will work with the sequencing data archived as part of the above mentioned studies to recapitulate several of their key findings.
 
 In doing so we will cover many broad informatic/bioinformatic techniques not limited to:
 
 - Working on the command line interface (CLI)
-- Using conda environments to install programs and packages
+- Using Conda environments to install programs and packages
 - Working with Docker images in Singularity
 - Working with core bioinformatic tools to perform:
     - access of archived sequencing data
     - sequencing pre-processing and quality control
     - sequence analysis
 - Workflow management with Nextflow
-- R scripting to manipulate, analyse and visualise data
+- R scripting to manipulate, analyze and visualize data
 
 I will provide resources for all topics we cover and you are encouraged to look at these
 resources if you wish to further your knowledge of the topic.
@@ -71,12 +71,12 @@ resources if you wish to further your knowledge of the topic.
 # Structure of the practical
 The practical will be divided up by days (1-4).
 
-Each day we will work towards our end goal of recapitulating the resutls of our chosen studies.
+Each day we will work towards our end goal of recapitulating the results of our chosen studies.
 
 One of the most important skills in computation biology / informatics is the effective
 sourcing of reference material. I.e. good googleing!
 
-As such throughout the 4 days, while you will be given a sturcutre to follow,
+As such throughout the 4 days, while you will be given a structure to follow,
 you will also be asked to work out how to do certain tasks on your own.
 But don't worry, the SequAna bioinformatician will be there to help you if you get stuck.
 
@@ -127,7 +127,7 @@ We'll need some programmes if we're going to do some work.
 
 One way to install programs on a Linux system is at the system level.
 
-This allows all users to access the progams. Many of the programs you've already
+This allows all users to access the programs. Many of the programs you've already
 used are installed at the systems level.
 
 To see where a program is being executed from you can use the command `which`. E.g.:
@@ -141,7 +141,7 @@ While this might seem convenient there are many reasons not to install programs 
 - You must have root access to be able to install the programs
 - It is difficult to work with multiple versions of programs (i.e. v0.1.3 vs v0.1.4)
 
-There are several ways to overcome the above issues. One is to download the source code for programs or pre-compiled programs and install these in a local directory. While this solves the problem of root access and the program will only be installed for your use, it still doesn't help us with managing multiple version of programs. It can also be difficult to download the source code of some programs and get it to complile correctly often due to dependency issues. However, sometimes downloading a program and installing it yourself is the only option available to you.
+There are several ways to overcome the above issues. One is to download the source code for programs or pre-compiled programs and install these in a local directory. While this solves the problem of root access and the program will only be installed for your use, it still doesn't help us with managing multiple version of programs. It can also be difficult to download the source code of some programs and get it to compile correctly often due to dependency issues. However, sometimes downloading a program and installing it yourself is the only option available to you.
 
 One of the first tasks we will need to undertake for our analysis is getting the sequencing data associated with the studies.
 
@@ -191,9 +191,11 @@ Now you know where the data is hidden, you can either work directly with that da
 
 There are a few key formats that you should be familiar with in the realms of computational biology.
 
-TODO cover the formats
+[What is a fasta file?](https://en.wikipedia.org/wiki/FASTA_format)
 
-Can use conda to intall samtools to view the bam file to look at the structures.
+[What is a fastq file?](https://en.wikipedia.org/wiki/FASTQ_format)
+
+[What are sam and bam files?](https://www.zymoresearch.com/blogs/blog/what-are-sam-and-bam-files#:~:text=SAM%20files%20are%20a%20type,the%20examples%20for%20this%20section.)
 
 # DAY 2: Böstrom et al 2017
 ## Part XXX:
@@ -201,9 +203,9 @@ Can use conda to intall samtools to view the bam file to look at the structures.
 # Day 3: MacParland et al 2018
 
 ## Requirements
-You may want to download and install the [loupe browser](https://www.10xgenomics.com/products/loupe-browser/downloads). This is a browser designed by 10X to visualise the results of the Cell Ranger analysis that we will conduct below. Alternatively, I will load it on my machine and you can see what it looks like that way.
+You may want to download and install the [loupe browser](https://www.10xgenomics.com/products/loupe-browser/downloads). This is a browser designed by 10X to visualize the results of the Cell Ranger analysis that we will conduct below. Alternatively, I will load it on my machine and you can see what it looks like that way.
 
-You'll be working with R to analyse the outputs of the scRNA-seq data analysis. If you'd like to run R on your local mchine, you'll need to install R. You'll also likely want an IDE to work with. I would recommend either Rstudio or Visual Studio Code. You'll also need to install the following packages:
+You'll be working with R to analyze the outputs of the scRNA-seq data analysis. If you'd like to run R on your local machine, you'll need to install R. You'll also likely want an IDE to work with. I would recommend either Rstudio or Visual Studio Code. You'll also need to install the following packages:
 
 - dplyr
 - Seurat
@@ -255,7 +257,7 @@ An explanation of the output files can be found [here](https://support.10xgenomi
 > **Exercise XXX**: Examine the output of `cellranger count` and compare it to the above documentation.
 
 ## Part XXX: Getting files in and out of the server
-Obviously, there will be many occasions where you want to either load files on to the server, or take files off of ther server.
+Obviously, there will be many occasions where you want to either load files on to the server, or take files off of their server.
 
 We will cover that now.
 
@@ -267,7 +269,7 @@ The most common way to do this is using [scp](https://linuxize.com/post/how-to-u
 
 ## Part XXX: Running cellranger aggr
 
-Great! Now we have one sample analysed, but what about the other samples?
+Great! Now we have one sample analyzed, but what about the other samples?
 
 This is where `cellranger aggr` is used. [Here's](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/using/aggregate) the documentation on running aggr. And [here's](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/output/aggr-outputs) the documentation for the outputs.
 
@@ -276,10 +278,10 @@ This is where `cellranger aggr` is used. [Here's](https://support.10xgenomics.co
 The documentation of the output structure for cellranger aggr is [here](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/output/aggr-outputs).
 
 
-> **Exercise XXX**: Again, pull down the .html and cloupe files to visualise the results. Can you see the addition of the additional samples?
+> **Exercise XXX**: Again, pull down the .html and cloupe files to visualize the results. Can you see the addition of the additional samples?
 
 ## Part XXX: Preparing R
-We've done the heavy computing on the computational server. If you remeber, the sequencing files that we started with were very large and the computation would have taken a very long time on your laptop - if it was possible at all.
+We've done the heavy computing on the computational server. If you remember, the sequencing files that we started with were very large and the computation would have taken a very long time on your laptop - if it was possible at all.
 
 However, the files that we've ended up with are not so large - about 100MB.
 
@@ -295,16 +297,16 @@ If you choose to run on your local machine, then you'll need to install R and al
 
 If you choose work on the server then you can either start up an R session on the command line (`R`) or you can use an IDE such as Visual Studio Code (recommended) to connect over SSH. This will make the work much easier for you.
 
-> **Exercise XXX**: Get your chosen environment setup for the remainder of the analsis in R.
+> **Exercise XXX**: Get your chosen environment setup for the remainder of the analysis in R.
 
 ## Part XXX: scRNA-seq analysis with Seurat in R
-Seurat is a package used to analyse scRNA-seq data. It has gained great populatrity in recent years and is widely used by the academic community and industry alike.
+Seurat is a package used to analyze scRNA-seq data. It has gained great popularity in recent years and is widely used by the academic community and industry alike.
 
-Much of the work we'll be doing to recreate the results of the MacParland analysis are well documented by the creators of the Seurat pacakge. For example, much of what we'll be doing is covered in their [pbmc3K tutorial](https://satijalab.org/seurat/articles/pbmc3k_tutorial.html).
+Much of the work we'll be doing to recreate the results of the MacParland analysis are well documented by the creators of the Seurat package. For example, much of what we'll be doing is covered in their [pbmc3K tutorial](https://satijalab.org/seurat/articles/pbmc3k_tutorial.html).
 
 > **Exercise XXX: Look through the methods of the MacParland paper to see where we're at with the analysis. Critically appraise how they've written up the methods. Is it easy to follow? Is there enough detail?
 
-The first stage of analysis in R is to create a Seurate object from the features/barcode table that we created using the cellranger aggr command.
+The first stage of analysis in R is to create a Seurat object from the features/barcode table that we created using the cellranger aggr command.
 
 The table that we want to import is here: `/home/humebc/VTK_22/macparland/results/aggr/macparland/outs/count/filtered_feature_bc_matrix`
 
