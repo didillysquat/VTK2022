@@ -203,6 +203,15 @@ Can use conda to intall samtools to view the bam file to look at the structures.
 ## Requirements
 You may want to download and install the [loupe browser](https://www.10xgenomics.com/products/loupe-browser/downloads). This is a browser designed by 10X to visualise the results of the Cell Ranger analysis that we will conduct below. Alternatively, I will load it on my machine and you can see what it looks like that way.
 
+You'll be working with R to analyse the outputs of the scRNA-seq data analysis. If you'd like to run R on your local mchine, you'll need to install R. You'll also likely want an IDE to work with. I would recommend either Rstudio or Visual Studio Code. You'll also need to install the following packages:
+
+- dplyr
+- Seurat
+- patchwork
+- ggplot2
+- languageserver
+
+Alternatively you can run R on the computation server (where it is already installed). But you'll likely want to connect to it using [Visual Studio Code](https://code.visualstudio.com/download). So install this on your local machine and install the R extension and the SSH extension.
 ## Part XXX: Running cellranger bamtofastq
 
 TODO incorporate down sampling into this. If the students can down sample then they can work with their own sets of files and fully develop a Nextflow pipeline.
@@ -218,7 +227,7 @@ We will be working with a program called Cell Ranger which was developed by 10X 
 
 The Cell Ranger pipeline generally starts from the raw output of the Illumina sequencing platform (raw base call format; BCL). Using the `cellranger mkfastq` command a set of fastq files are generated from the BCL. The set of fastq files is generated in a particular way where the various index sequences (i.e. barcode and unique molecular identifier (UMI)) are held in separate files to the RNA sequences. In Cell Ranger language, a barcode is unique to a cell (and a GEM well), and a UMI is unique to a transcript (pre-PCR).
 
-Take a look at the data we downloaded from MacParland. You'll notice that it's in bam format, not fastq. This is normal for submission of 10X data. The bam format contains all the information of the fastq files, but with additional information on mapping.
+Take a look at the data we downloaded from MacParland. You'll notice that it's in bam format, not fastq. This is normal for submission of 10X data to sequencing archives like NCBI. The bam format contains all the information of the fastq files, but with additional information on mapping.
 
 As we touched on earlier, bam format is binary and not human readable. In order to read a bam file you will have to convert it to sam format.
 
@@ -234,12 +243,12 @@ As input, `cellranger count` takes fastq files. But we have bam files. Fortunate
 
 > **Excercise XXX**: Install cellranger. Find the bamtofastq executable and make sure you can get it to run.
 
-We won't run it on the actual data because that would take a lot of time and resources that we don't have available to us right now. Instead I've recreated the output files here: XXX
+We won't run it on the actual data because that would take a lot of time and resources that we don't have available to us right now. Instead I've recreated the output files here: `/home/humebc/VTK_22/macparland/results/bamtofastq`
 
 ## Part XXX: Running cellranger count
 Now that we have the fastq files we can run the `cellranger count` program to generate the count tables.
 
-> **Excercise XXX**: Run `cellranger count` on one set of the fastq files.
+> **Excercise XXX**: Run `cellranger count` on one set of the fastq files. You'll need to use a reference transcriptome. These come prebuilt for certain organisms (e.g. Human) and I have already downloaded it for you. It is here: `/home/humebc/VTK_22/reference/refdata-gex-GRCh38-2020-A`
 
 An explanation of the output files can be found [here](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/output/gex-outputs)
 
@@ -254,7 +263,118 @@ The most common way to do this is using [scp](https://linuxize.com/post/how-to-u
 
 > **Exercise XXX**: Transfer the .html file that was generated to your local machines hard drive. Open it up.
 
-> **Exercise XXX**: If you installed the Loupe browser, open up the Loupe file on your local machine. If you didn't watch me!
+> **Exercise XXX**: If you installed the Loupe browser, open up the Loupe file on your local machine. If you didn't, watch me!
 
 ## Part XXX: Running cellranger aggr
+
+Great! Now we have one sample analysed, but what about the other samples?
+
+This is where `cellranger aggr` is used. [Here's](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/using/aggregate) the documentation on running aggr. And [here's](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/output/aggr-outputs) the documentation for the outputs.
+
+> **Exercise XXX**: Do what's necessary to run `cellranger aggr`. Is it annoying having to run each sample individually on the command line? Imagine if you had 85 samples? Now how annoying is it? Do you think there are better approaches to running many samples, not just for Cell Ranger, but in general?
+
+The documentation of the output structure for cellranger aggr is [here](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/output/aggr-outputs).
+
+
+> **Exercise XXX**: Again, pull down the .html and cloupe files to visualise the results. Can you see the addition of the additional samples?
+
+## Part XXX: Preparing R
+We've done the heavy computing on the computational server. If you remeber, the sequencing files that we started with were very large and the computation would have taken a very long time on your laptop - if it was possible at all.
+
+However, the files that we've ended up with are not so large - about 100MB.
+
+From here, the computations are less intense and the need for a large parallelization is reduced. We'll doing the next set of computations, and generating figures, in R.
+
+[What is R?](https://www.r-project.org/about.html)
+
+At this point we have a choice. We can either move the files that we generated and that are required for the next analysis onto our local machines and work with them there.
+
+Alternatively, we can again 'connect' to the server and perform our analysis there.
+
+If you choose to run on your local machine, then you'll need to install R and all of the dependencies that we'll be requiring. See the requirements sections at the beginning of this Day's section.
+
+If you choose work on the server then you can either start up an R session on the command line (`R`) or you can use an IDE such as Visual Studio Code (recommended) to connect over SSH. This will make the work much easier for you.
+
+> **Exercise XXX**: Get your chosen environment setup for the remainder of the analsis in R.
+
+## Part XXX: scRNA-seq analysis with Seurat in R
+Seurat is a package used to analyse scRNA-seq data. It has gained great populatrity in recent years and is widely used by the academic community and industry alike.
+
+Much of the work we'll be doing to recreate the results of the MacParland analysis are well documented by the creators of the Seurat pacakge. For example, much of what we'll be doing is covered in their [pbmc3K tutorial](https://satijalab.org/seurat/articles/pbmc3k_tutorial.html).
+
+> **Exercise XXX: Look through the methods of the MacParland paper to see where we're at with the analysis. Critically appraise how they've written up the methods. Is it easy to follow? Is there enough detail?
+
+The first stage of analysis in R is to create a Seurate object from the features/barcode table that we created using the cellranger aggr command.
+
+The table that we want to import is here: `/home/humebc/VTK_22/macparland/results/aggr/macparland/outs/count/filtered_feature_bc_matrix`
+
+The commands for creating a Seurat object is as follow:
+```
+# First read in the data
+mc.data <- Read10X(data.dir = "/home/humebc/VTK_22/macparland/results/aggr/macparland/outs/count/filtered_feature_bc_matrix", min.cells = 3)
+```
+
+Note that we are screening for features that are found in at least 3 cells, the same as they did in MacParland.
+
+Until now we haven't really been able to get a feel for what the count table looks like. Now we can:
+
+```
+# Preview the table
+mc.data[1:5, 1:30]
+
+# Then make the Seurat object
+mc <- CreateSeuratObject(counts = mc.data, project = "macparland")
+```
+
+You're welcome to call the Seurat variable whatever you like, but its probably easiest if you call it `mc` like I have.
+
+A common part of processing the scRNA-seq data is to filter the data for 'high quality' cells.
+
+There are several common paramaters by which cells can be filtered. E.g. see [here](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4758103/).
+
+One common parameter is the percentage of UMIs that are mitochondrial in origin.
+
+We can calculate this metric for our data as follows:
+```
+mc[["percent.mt"]] <- PercentageFeatureSet(mc, pattern = "^MT-")
+```
+
+Other metrics have already been calculated for the dataset as part of creating the Seurat object:
+```
+head(pbmc@meta.data, 5)
+summary(mc@meta.data)
+```
+
+It can be helpful to visualise these metrics:
+```
+# Create a violin plot
+VlnPlot(mc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
+
+# Visualise the correlation between metrics
+plot1 <- FeatureScatter(pbmc, feature1 = "nCount_RNA", feature2 = "percent.mt")
+plot2 <- FeatureScatter(pbmc, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")
+plot1 + plot2
+```
+
+Finally, we want to perform the filtering out cells from the data in the same way MacParland did. I.e.:
+- filter out cell with < 1500 UMIs
+- filter out cells with a high percentage of counts of mitochondrial origin
+
+> **Exercise XXX**: Filter out those cells. Have a look at the pbmc3K tutorial for how to do this.
+
+Now that we have completed the pre-processing of the data.
+
+> **Exercise XXX**: Visualize the data again to make sure that the filtering has been applied. Has it?
+
+## Part XXX: Normalization, 
+
+
+
+
+
+
+
+
+
+
 
