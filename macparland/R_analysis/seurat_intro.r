@@ -58,20 +58,22 @@ DimPlot(mc, reduction = "pca")
 ggsave("dimplot.png")
 
 # NB fast=F must be set in order to return a ggplot object.
-dim.heat.map = DimHeatmap(mc, dims = 1, cells = 500, balanced = T, fast=F, nfeatures=100)
-ggsave("dimheatmap.png", dim.heat.map)
+DimHeatmap(mc, dims = 1, cells = 500, balanced = T, fast=F, nfeatures=100)
+DimHeatmap(mc, dims = 1:15, cells = 500, balanced = TRUE, fast=F)
+ggsave("dimheatmap.png")
 
 mc <- JackStraw(mc, num.replicate = 100)
 mc <- ScoreJackStraw(mc, dims = 1:20)
 
 JackStrawPlot(mc, dims = 1:15)
 
-ElbowPlot(mc)
+# The authors used 29 PCs
+ElbowPlot(mc, ndims=35)
 
 mc <- FindNeighbors(mc, dims = 1:10)
 # Some further details on the parameters used for the FindCluster command can be found here:
 # https://github.com/BaderLab/singleLiverCells
-mc <- FindClusters(mc, resolution = 0.5, pc.use)
+mc <- FindClusters(mc, resolution = 0.5, pc.use=1:10)
 
 head(Idents(mc), 5)
 

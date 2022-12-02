@@ -366,7 +366,153 @@ Now that we have completed the pre-processing of the data.
 
 > **Exercise XXX**: Visualize the data again to make sure that the filtering has been applied. Has it?
 
-## Part XXX: Normalization, 
+> **Exercise XXX**: How would we produce the figure from the paper that shows library size plotted against mitochrondrial transcript percent?
+## Part XXX: Normalization and dimensionality reduction
+
+You'll hear the term normalization a lot in computational biology and data science.
+
+It can have different meanings depending on the context.
+
+Here, we're normalizing the feature expression measurements for each of the individual cells according to the total expression of the cell. E.g. think about a case where one cell has twice the number of UMIs sequenced than another another. If for a given feature the first cell has a count of 4 and in the second the cell has a count of 8, is that feature upregulated in the second cell?
+
+The authors performed normalization using an R package called [scran](https://bioconductor.org/packages/release/bioc/html/scran.html). However, for simplicity's sake, we will continue using Seurat.
+
+Normalize using Seurat:
+```
+mc <- NormalizeData(mc, normalization.method = "LogNormalize", scale.factor = 10000)
+```
+
+From here we are interested in clustering the data. That is assigning each of the cells to a given group.
+
+To do this clustering we need to get an idea for how related each of the cells are to all of the other cells.
+
+> **Exercise XXX**: Discuss, what are we basing this similarity on?
+
+> **Exercise XXX**: Inspect the data, how many cells do we have? How many features?
+
+Generally researchers choose to work on a subset of features for performing similarity analyses and clustering. This is to minimise computational load. All features could be used but do you think that all features provide the same ammount of information with regards to how similar cells are?
+
+The most informative features will be those that vary the most between cells. In other words, they will be those features with the highest count variance across the cells.
+
+We will identify these highly vairable features and use them for our down stream analyses:
+
+```
+mc <- FindVariableFeatures(mc, selection.method = "vst", nfeatures = 2000)
+
+# Identify the 10 most highly variable genes
+top10 <- head(VariableFeatures(mc), 10)
+
+# plot variable features with and without labels
+plot1 <- VariableFeaturePlot(mc)
+plot2 <- LabelPoints(plot = plot1, points = top10, repel = TRUE)
+plot1 + plot2
+```
+
+The next step for clustering is to perform dimensionality reduction.
+
+[What is dimensionality reduction?](https://en.wikipedia.org/wiki/Dimensionality_reduction)
+
+We will do this by Principal Component Analysis (PCA)
+
+[What is PCA?](https://en.wikipedia.org/wiki/Principal_component_analysis)
+
+Before performing the PCA we need to standardize. This step gives equal weight to each of the features in downstream analyses, so that highly-expressed genes do not dominate.
+
+Standardization shifts the expression of each gene, so that the mean expression across cells is 0 and scales the expression of each gene, so that the variance across cells is 1.
+
+In Seurat this standardization is referred to as scaling.
+
+Let's scale the data:
+```
+# Also referred to as standardization
+all.genes <- rownames(mc)
+mc <- ScaleData(mc, features = all.genes)
+```
+
+Then we can perform PCA
+```
+mc <- RunPCA(mc, features = VariableFeatures(object = mc))
+```
+
+And visualize the resultant Principal Components (PCs)
+```
+VizDimLoadings(mc, dims = 1:2, reduction = "pca")
+ggsave("visdimloadings.png")
+
+DimPlot(mc, reduction = "pca")
+ggsave("dimplot.png")
+
+# NB fast=F must be set in order to return a ggplot object.
+DimHeatmap(mc, dims = 1, cells = 500, balanced = T, fast=F, nfeatures=100)
+ggsave("dimheatmap.png")
+```
+
+Moving forward, we want to use a certain number of the resultant PCs. There wouldn't be much point in using all of the PCs. If we did that we wouldn't have reduced the dimensionaly of the dataset and the computational complexity would still be very high.
+
+How many PCs do we select though?
+
+One of the simplest ways to assess this is with an elbow plot:
+```
+ElbowPlot(mc, ndims=35)
+```
+> **Exercise XXX**: How many PCs should we move forwards with? How many did the authors choose?
+
+## Part XXX: Clustering, non-linear dimensional reduction and identifying cluster biomarkers
+Seurat implements a graph-based approach to clustering.
+
+Cells are embeded in a graph structure - for example a K-nearest neighbor (KNN) graph, with edges drawn between cells with similar feature expression patterns, and then attempt to partition this graph into highly interconnected ‘quasi-cliques’ or ‘communities’.
+
+The first part of this process is to find the Nearest Neibours of the cells:
+```
+mc <- FindNeighbors(mc, dims = 1:10)
+```
+
+Clusters are then called according to the Seurate algorithm from the graph:
+```
+mc <- FindClusters(mc, resolution = 0.5, pc.use=1:10)
+```
+
+Take a look at the cluster assignments:
+```
+head(Idents(mc), 5)
+```
+
+Finally we can run non-linear dimensional reduction in the form of UMAP or tSNE:
+```
+DimPlot(mc, reduction = "umap", pt.size=1)
+ggsave("umap.png")
+
+mc <- RunTSNE(mc, dims = 1:10)
+
+DimPlot(mc, reduction = "tsne", pt.size=1)
+ggsave("tsne.png")
+```
+
+In MacParland et al they identified the cells in the clusters by looking at cluster biomarkers. That is, genes that are unique markers of the cluster compared to all other clusters. They then used those identified genes with a manually curated set of genes that are kown to be indicative of certain cell types to assign cell types to the clusters.
+
+We will not identify the cell type here, but we will identify the biomarkers (features) of the clusters.
+
+Seurat includes power functionality to this end both to identify the markers and visually display the results for each of the clusters. We will produce an overview figure here as the last part of the practical:
+
+```
+mc.markers <- FindAllMarkers(mc, only.pos = TRUE, min.pct = 0.25, logfc.threshold = 0.25)
+mc.markers %>%
+    group_by(cluster) %>%
+    slice_max(n = 2, order_by = avg_log2FC)
+
+
+mc.markers %>%
+    group_by(cluster) %>%
+    top_n(n = 10, wt = avg_log2FC) -> top10
+
+DoHeatmap(mc, features = top10$gene) + NoLegend()
+ggsave("cluster_diff_expression.png")
+```
+
+# Conclusions
+Congratulations, you have completed the practical. I hope you have enjoyed it and found it informative. I will leave this practical online for your reference. Thanks for attending.
+
+
 
 
 
