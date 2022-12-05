@@ -295,6 +295,8 @@ Now it's time for us to create the DESeq2 object and perform the analysis.
 
 The DESeq2 documentation is fantastic and I would suggest you open it up now and follow along. To create the first figure from the paper we'll be using some of the standard approaches in this document.
 
+> **Exercise**: Follow along with me or with the DESeq2 documentation to produce a heat map similar to the one in Bostrom et al for the HeLa cells in the different cell cycle stages.
+
 
 
 

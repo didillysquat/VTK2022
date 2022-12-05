@@ -1,2 +1,5 @@
 ena-ftp-downloader-1.0.3/
 reference
+*.nextflow
+*.nextflow*
+bostrom/kallisto
