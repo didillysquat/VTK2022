@@ -1,10 +1,11 @@
 #!/usr/bin/env nextflow
 
 /*
-All code associated with the analysis of the MacParland dataset for the 2022 VTK
+All code associated with the analysis of the Böstrom dataset for the 2022 VTK
 */
 
 samples_ch = Channel.fromFilePairs("/home/humebc/VTK_22/bostrom/raw_reads/*/*.fastq.gz", size: 1).map{[it[0], it[1][0]]}
+grch38_index = file("/home/humebc/VTK_22/reference/kallisto_ensembl_ref/Homo_sapiens.GRCh38.cdna.all.short_name.kallisto.index")
 
 process fastp{
     tag "${sample}"
@@ -25,27 +26,21 @@ process fastp{
     """
 }
 
-// process kallisto{
-//     tag "${sample}"
-//     container "jennylsmith/kallistov45.0:latest"
-//     publishDir "/home/humebc/projects/20220329_moya/spis_csm/kallisto_quant_results/${type}/${sample}"
-//     cpus 10
+process kallisto{
+    tag "${sample}"
+    container "jennylsmith/kallistov45.0:latest"
+    publishDir "/home/humebc/VTK_22/bostrom/kallisto/${sample}"
+    cpus 10
 
-//     input:
-//     tuple val(type), val(sample), path(read_1_clean), path(read_2_clean) from kallisto_in_ch
-//     file host_kallisto_index
-//     file zooxs_kallisto_index
+    input:
+    tuple val(sample), path(read_1_clean) from kallisto_in_ch
+    file grch38_index
 
-//     output:
-//     file "*" into kallisto_out_ch
+    output:
+    file "*" into kallisto_out_ch
 
-//     script:
-//     if (type == "host")
-//     """
-//     kallisto quant -i $host_kallisto_index -o . -t ${task.cpus} $read_1_clean $read_2_clean
-//     """
-//     else if (type == "zooxs")
-//     """
-//     kallisto quant -i $zooxs_kallisto_index -o . -t ${task.cpus} $read_1_clean $read_2_clean
-//     """
-// }
+    script:
+    """
+    kallisto quant -i $grch38_index -o . -t ${task.cpus} --single -l 200 -s 30 $read_1_clean
+    """
+}

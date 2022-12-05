@@ -120,7 +120,7 @@ What are ssh-keys?(https://jumpcloud.com/blog/what-are-ssh-keys)
 
 > **Exercise 1:** Generate a pair of ssh-keys. Send the public key to Ben for installation on the server along with your username. N.B. if working on Windows, try to use the Open SSH Client on the command line with the command: `ssh-keygen`. For both Windows and mac, the key should be saved to the default location which should be a hidden folder called `.ssh` inside your user's base directory.
 
-> **Exercise 2:** ssh into the sequana server once Ben has installed your SSH keys. Ask Ben for sequana's IP. (optional) [set up](https://linuxize.com/post/using-the-ssh-config-file/) a 'config' file in '.ssh' so that you don't have to enter your IP and username everytime you want to 
+> **Exercise 2:** ssh into the sequana server once Ben has installed your SSH keys. Ask Ben for sequana's IP. (optional) [set up](https://linuxize.com/post/using-the-ssh-config-file/) a 'config' file in '.ssh' so that you don't have to enter your IP and username every time you want to 
 
 ## Part 2: Installing software in your user directory
 We'll need some programmes if we're going to do some work.
@@ -155,13 +155,11 @@ We will work with this program later on to down load data. But first, let's meet
 
 See [here](https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html) for managing environmens with conda. Conda can be installed in your home directory without root access (sudo access) and enables you to install programs locally.
 
-> **Exercise 3**: Install [miniconda](https://docs.conda.io/en/latest/miniconda.html) in your sequana home directory. If you're not sure which options to select, ask!
+> **Exercise 3**: Install [miniconda](https://docs.conda.io/en/latest/miniconda.html) in your sequana home directory. If you're not sure which options to select, ask! Once it's installed you'll need to start a new ssh session.
 
 Great! We now have the ability to create environments and install programs locally using the 'conda' command. We will use conda later on.
 
-> **Exercise 4**: Create a new environment called `testing_conda` and in it install: 
-> - python3 v3.9
-> - pandas (any version)
+> **Exercise 4**: Create a new environment called `kallisto_env` and in it install: 
 > - [kallisto](https://anaconda.org/bioconda/kallisto)
 >
 > Verify that you can run kallisto
@@ -198,7 +196,108 @@ There are a few key formats that you should be familiar with in the realms of co
 [What are sam and bam files?](https://www.zymoresearch.com/blogs/blog/what-are-sam-and-bam-files#:~:text=SAM%20files%20are%20a%20type,the%20examples%20for%20this%20section.)
 
 # DAY 2: Böstrom et al 2017
-## Part XXX:
+
+## Requirements
+Install R on your system or on the sequana server and install BiocManager
+
+```
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+```
+
+## Part 5: preprocessing:
+For Böstrom there is a single fastq file per sample.
+
+> **Exercise 7**: Open up the fastq file and have a look at it. Can you deduce the structure of the fastq format from this file? What is the /1 at the end of the reads? How about those quality scores, what use will we make of them?
+
+It's common practice to remove low quality bases at the beginning and ends of reads and to check for and remove adapters?
+
+> **Exercise 8**: Discuss: Why are there still adapters in my sequences if the sequencing starts after the adapters?
+
+There are a couple of options for removing low quality bases and adapters.
+
+> **Exercise 8**: Have a look at a couple of the options: [fastqc](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/), [fastp](https://github.com/OpenGene/fastp). [trimmomatic](http://www.usadellab.org/cms/?page=trimmomatic). Specifically, see if you can resolve any differences between the programs. Is one easier to use than the others? Do they all have the same functionality? Let's say you want to remove adapters and trim for quality score at the beginning and end of the read at a phred score of 20.
+
+[What is a phred score?](https://en.wikipedia.org/wiki/Phred_quality_score)
+
+I've worked with each of these over the years. For ease of use and speed, I like fastp.
+
+> **Exercise 9**: Install fastp and run it on each of your samples. Set the quality threshold to 20.
+
+## Part XXX: Getting files in and out of the server
+Obviously, there will be many occasions where you want to either load files on to the server, or take files off of their server.
+
+We will cover that now.
+
+The most common way to do this is using [scp](https://linuxize.com/post/how-to-use-scp-command-to-securely-transfer-files/) (secure copy).
+
+> **Exercise 10**: Inspect the output of fastp. Pull down the html file to inspect it.
+
+## Part XXX: pseudo-aligning with kallisto
+
+> **Exercise 11**: Discuss: What do you think is the next step after pre-processing? It's important to have a good overview of what you are trying to achieve and how.
+
+It's time to map and count!
+
+When it comes to mapping we have several options open to us.
+
+These can largely be categorized in two:
+- Map the reads to a genome and them count them
+- pseudo-align the reads to a transcriptome
+
+[What is mapping?](https://training.galaxyproject.org/training-material/topics/sequence-analysis/tutorials/mapping/tutorial.html)
+
+[What is a splice-aware aligner?](https://www.biostars.org/p/175454/)
+
+[What is pseudo-alignment?](https://tinyheero.github.io/2015/09/02/pseudoalignments-kallisto.html)
+
+> **Exercise**: Discuss: Understanding that pseudo aligners generally map to a transcriptome whereas tradition splice-aware mappers such as STAR map to a genome, can you think of a down side to work with a pseudo-aligner?
+
+Were going to go the pseudo-alignment route with kallisto: it's fast and does exactly what we need. As we're working with Human, there is a well established set of transcripts to map to (the transcriptome).
+
+I've downloaded the GRC38 transcriptome here: `/home/humebc/VTK_22/reference/kallisto_GRC38_reference/GRCh38_latest_rna.fna.gz`
+
+> **Exercise**: symlink the transcriptome into your directory structure somewhere.
+
+Before we map or align, we index our reference.
+
+[Why index?](https://www.biostars.org/p/212594/)
+
+> **Exercise**: Using your kallisto installation that you did earlier, index the reference GRCh38 transcriptome.
+
+[What is the GRCh38 assembly?](https://gatk.broadinstitute.org/hc/en-us/articles/360035890951-Human-genome-reference-builds-GRCh38-or-hg38-b37-hg19)
+
+> **Exercise**: Now perform the pseudo-alignment following the kallisto documentation.
+
+Have a look at the output directory of kallisto count. Take a look in some of the files. If you're not familiar with a file's extension, google it.
+
+In abundance.csv you'll see there is a column tpm.
+
+Raw read counts cannot be used to compare expression levels between samples due to the need to account for differences in transcript length, total number of reads per samples, and sequencing biases. Therefore, RNA-seq isoform quantification software summarize transcript expression levels either as TPM (transcript per million), RPKM (reads per kilobase of transcript per million reads mapped), or FPKM (fragments per kilobase of transcript per million reads mapped); all three measures account for sequencing depth and feature length.
+
+> **Exercise**: Research: What is tpm? What are RPKM and FPKM? Do the descriptions make sense?
+
+> **Exercise**: Discuss, what are we going to count? Transcripts or Genes? If we want to count genes, how do we go from transcipts to genes?
+
+There is a package designed specifically to import data from the output of kallisto. It's called [tximport](https://bioconductor.org/packages/release/bioc/vignettes/tximport/inst/doc/tximport.html).
+
+We'll use this to import our data. As part of importing the data we will collapse our count data from the transcript level to the gene level. tximport can also help us with that. To do that we need to provide tximport with a dataframe that maps the transcript ID to a gene ID. Several transcripts can originate from a single gene. These are referred to as isoforms. To generate the tx2gene data frame, we can use another package called [makeTxDbFromEnsembl](https://rdrr.io/bioc/GenomicFeatures/man/makeTxDbFromEnsembl.html) from the [GenomicFeatures](https://bioconductor.org/packages/release/bioc/html/GenomicFeatures.html) package. This can all get a little complicated so I'll help you with this.
+
+You will find that there is considerable documentation on the above, both as part of the tximport documentation but also with the [DESEQ2](https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html) program that we will use to do the differential expression analysis.
+
+I've created a file that contains the meta information for the samples here:
+
+I generated it form [this](https://www.ncbi.nlm.nih.gov/Traces/study/?acc=PRJNA413699&o=acc_s%3Aa&s=SRR6150369,SRR6150370,SRR6150371,SRR6150372,SRR6150373,SRR6150374,SRR6150375,SRR6150376,SRR6150377,SRR6150378,SRR6150379,SRR6150380,SRR6150381,SRR6150382,SRR6150383,SRR6150384,SRR6150385,SRR6150386,SRR6150387,SRR6150388,SRR6150389). You'll notice that I combined the reads from the same sample.
+
+> **Exercise**: import your outputs from kallisto into R so that we can use DESEQ2 to analyse them. If you're up for the challenge, have a go at doing it yourself following the DESEQ2 documentation. Else follow along with me.
+
+Now it's time for us to create the DESeq2 object and perform the analysis.
+
+The DESeq2 documentation is fantastic and I would suggest you open it up now and follow along. To create the first figure from the paper we'll be using some of the standard approaches in this document.
+
+
+
+
 
 # Day 3: MacParland et al 2018
 
@@ -255,13 +354,6 @@ Now that we have the fastq files we can run the `cellranger count` program to ge
 An explanation of the output files can be found [here](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/output/gex-outputs)
 
 > **Exercise XXX**: Examine the output of `cellranger count` and compare it to the above documentation.
-
-## Part XXX: Getting files in and out of the server
-Obviously, there will be many occasions where you want to either load files on to the server, or take files off of their server.
-
-We will cover that now.
-
-The most common way to do this is using [scp](https://linuxize.com/post/how-to-use-scp-command-to-securely-transfer-files/) (secure copy).
 
 > **Exercise XXX**: Transfer the .html file that was generated to your local machines hard drive. Open it up.
 
