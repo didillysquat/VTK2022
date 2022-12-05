@@ -3,3 +3,7 @@ reference
 *.nextflow
 *.nextflow*
 bostrom/kallisto
+*work*
+bostrom/raw_reads/
+bostrom/redundant_after_combination_raw_reads/
+*.png

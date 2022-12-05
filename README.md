@@ -1,5 +1,5 @@
 # Advanced Technologies for the Life Sciences: Bioinformatics Practical
-The markdown document will cover all aspects of the bioinformatics
+This markdown document will cover all aspects of the bioinformatics
 practical related to the 2022 VTK Advanced Technologies for the Life Sciences.
 
 # Introduction
@@ -21,7 +21,7 @@ transcription factor networks in cancer cells. PLOS ONE.
 
 - scRNA-seq: [MacParland et al 2018](https://www.nature.com/articles/s41467-018-06318-7). Single cell RNA sequencing of human liver reveals distinct intrahepatic macrophage populations. Nature Communications.
 
-Both papers have been uploaded to the ILLIAS system in Publications/SequAna
+Both papers have been uploaded to the ILLIAS system in `Publications/SequAna`
 
 It would be a good idea to make yourself familiar with the papers before starting the practical work.
 
@@ -29,17 +29,17 @@ It would be a good idea to make yourself familiar with the papers before startin
 The practical will take place in room M739 from 09.00-16.30 on the 6-8th of December. It is currently unclear whether we will have access to the room on the 9th of December as well.
 
 Ben Hume, the current SequAna bioinformatician will
-be running the practical and there to assist you.
+be running the practical and will be there to assist you.
 
 ## Computing setup
 You will need access to a computer to complete this practical.
 While M739 does contain computers that you could use to login to the
-SequAna computation server (where much of the work will occur)
+SequAna computational server (where much of the work will occur)
 this is a very inconvenient way to work as your home directory is
 deleted after every session and it is not possible to install
 applications that use Graphical User Interfaces (GUI).
 
-As such it is strongly recommended that you bring a laptop with
+As such, it is strongly recommended that you bring a laptop with
 you to complete the practical. There will be 1 spare laptop
 available for use during the practical session in M739, but this
 laptop cannot leave the room as it belongs to SequAna.
@@ -48,7 +48,7 @@ laptop cannot leave the room as it belongs to SequAna.
 
 The main objective of this practical is to give you an introduction to the tools that are used by computational biologist/bioinformaticians to generate meaningful results from sequencing data.
 
-The objective of this course is not for you to become proficient or masterful of the techniques we will be covering (we have only 3 or 4 days!). Any proficiency gained, however, 
+The objective of this course is not for you to become proficient or masterful of the techniques we will be covering (we have only 3 or 4 days!), nor to perfectly recreate the figures from the manuscripts. The important part is the journey, not the destination. So take your time. Any proficiency gained in the techniques we cover 
 will likely be extremely valuable to you in your career as a research scientist.
 
 To achieve this objective we will work with the sequencing data archived as part of the above mentioned studies to recapitulate several of their key findings.
@@ -68,19 +68,21 @@ In doing so we will cover many broad informatic/bioinformatic techniques not lim
 I will provide resources for all topics we cover and you are encouraged to look at these
 resources if you wish to further your knowledge of the topic.
 
-# Structure of the practical
-The practical will be divided up by days (1-4).
+If you find yourself ahead of the rest of the group, feel free to work on whatever you like or take the time to looking the topics we've covered so far in more detail.
 
-Each day we will work towards our end goal of recapitulating the results of our chosen studies.
+# Structure of the practical
+The practical will be divided up by days (1-3). We'll hold the 4th day spare and see how we're getting on. We can be flexible with how or if we use the 4th day.
+
+Each day we will work towards our end goal of recapitulating the results of our chosen studies. But remember, our goal is to learn along the way, not to get to the end. I would rather we take our time on the journey that reach the final figures.
 
 One of the most important skills in computation biology / informatics is the effective
 sourcing of reference material. I.e. good googleing!
 
-As such throughout the 4 days, while you will be given a structure to follow,
+As such throughout the 3/4 days, while you will be given a structure to follow,
 you will also be asked to work out how to do certain tasks on your own.
-But don't worry, the SequAna bioinformatician will be there to help you if you get stuck.
+But don't worry, the SequAna bioinformatician will be there to help you when you get stuck. Much of what you're asked to do will be new to you and may feel challenging - that's totally normal.
 
-If there are any requirements for the day's exercises these will be listed at the beginning of each day's section.
+If there are any requirements for the day's exercises these will be listed at the beginning of each day's section in a 'requirements' section. For example some packages take a long time to install so it's best to do this setup in advance.
 
 # DAY 1: Installing programs and fetching data
 
@@ -98,9 +100,9 @@ computational server that is creatively named 'sequana'.
 
 The server runs a Linux distribution: Ubuntu.
 
-[What is an operating system](https://en.wikipedia.org/wiki/Operating_system)
+[What is an operating system?](https://en.wikipedia.org/wiki/Operating_system)
 
-[What is Unix](https://en.wikipedia.org/wiki/Unix)
+[What is Unix?](https://en.wikipedia.org/wiki/Unix)
 
 [What is Linux?](https://www.linux.com/what-is-linux/)
 
@@ -108,7 +110,7 @@ The vast majority of bioinformatic programs run in Linux,
 although many can also be run in Windows or on Mac OS X.
 
 Max OS X is Unix-based and therefore has many similarities to Linux distributions.
-The terminal app on Mac OS X offers the user a CLI very similar to that of Linux distributions.
+The terminal app on Mac OS X offers the user a command line interface (CLI; terminal) very similar to that of Linux distributions.
 
 To connect to sequana we will use ssh.
 
@@ -137,7 +139,7 @@ $ which ls
 /usr/bin/ls
 ```
 
-While this might seem convenient there are many reasons not to install programs at the system level not limited to:
+While this might seem convenient, there are many reasons not to install programs at the system level not limited to:
 - You must have root access to be able to install the programs
 - It is difficult to work with multiple versions of programs (i.e. v0.1.3 vs v0.1.4)
 
@@ -151,19 +153,20 @@ We will use their [File Downloader Command Line Tool](https://ena-docs.readthedo
 
 > **Exercise 3**: Install the ENA File Downloader in your home directory and make sure you can get it to execute.
 
-We will work with this program later on to down load data. But first, let's meet another option for installing programs: [Conda](https://conda.io/projects/conda/en/latest/index.html) - a package manager that allows you to create multiple environments, often specific to a given project or analysis, that can have different packages and programs installed in them.
+We will work with this program later on to download data. But first, let's meet another option for installing programs: [Conda](https://conda.io/projects/conda/en/latest/index.html) - a package manager that allows you to create multiple environments, often specific to a given project or analysis, that can have different packages and programs installed in them.
 
 See [here](https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html) for managing environmens with conda. Conda can be installed in your home directory without root access (sudo access) and enables you to install programs locally.
 
 > **Exercise 3**: Install [miniconda](https://docs.conda.io/en/latest/miniconda.html) in your sequana home directory. If you're not sure which options to select, ask! Once it's installed you'll need to start a new ssh session.
 
-Great! We now have the ability to create environments and install programs locally using the 'conda' command. We will use conda later on.
+Great! We now have the ability to create environments and install programs locally using the 'conda' command.
 
 > **Exercise 4**: Create a new environment called `kallisto_env` and in it install: 
 > - [kallisto](https://anaconda.org/bioconda/kallisto)
 >
 > Verify that you can run kallisto
 
+We will use this environment later on.
 ## Part 3: Fetching data, directory permissions and working with symlinks
 Now it's time to get some data.
 
@@ -173,17 +176,19 @@ Wow! Great work, you've now got real sequencing data in your home directory.
 
 I only asked you to get 1 sample's worth of data because it would be redundant to have the same data downloaded multiple times on the server.
 
-And guess what, I've already downloaded the data we need. It's in the following directory on sequana: XXX
+And guess what, I've already downloaded the data we need. It's in the following directory on sequana: `/home/VTK/bostrom/raw_reads`.
+
+> **Exercise 6**: Go take a look at the data. How big is the data?
 
 One of the great things about operating on a Linux system is that its designed to allow concurrent access by multiple users.
 
-> **Exercise 6**: Take a look at the permissions for the data directory. What does it tell you about access to the directory? What is a group in Linux? Which groups are you a member of?
+> **Exercise 7**: Take a look at the permissions for the data directory. What does it tell you about access to the directory? What is a group in Linux? Which groups are you a member of?
 
-Now you know where the data is hidden, you can either work directly with that data, or an easier way is to create a shortcut to that data in your own directory. For this purpose, Linux has symbolic links.
+Now you know where the data is, you can either work directly with that data, or an easier way is to create a shortcut to that data in your own directory. For this purpose, Linux has symbolic links.
 
 [What is a symbolic link (symlink)?](https://www.futurelearn.com/info/courses/linux-for-bioinformatics/0/steps/201767#:~:text=A%20symlink%20is%20a%20symbolic,directory%20in%20any%20file%20system.)
 
-> **Exercise 7**: Create a directory structure in your home directory to hold the data. Create symlinks to populate the directories with symlinks to the sequencing files.
+> **Exercise 8**: Create a directory structure in your home directory to hold the data. Create symlinks to populate the directories with symlinks to the sequencing files.
 
 ## Part 4: Some key sequence data formats - fasta, fastq, fastq.gz, sam and bam
 
@@ -195,6 +200,8 @@ There are a few key formats that you should be familiar with in the realms of co
 
 [What are sam and bam files?](https://www.zymoresearch.com/blogs/blog/what-are-sam-and-bam-files#:~:text=SAM%20files%20are%20a%20type,the%20examples%20for%20this%20section.)
 
+That brings us to the end of the 'first day'. How long did it take us. Hopefully we didn't use up the full day because tomorrow we'll be doing some R in the latter half of the day. So for the remainder of today, I'd like you to spend some time getting familiar with R. This means getting it installed on your system. Either install Rstudio or Visual Studio Code. I'm here to help. Once you have that installed
+
 # DAY 2: Böstrom et al 2017
 
 ## Requirements
@@ -204,6 +211,17 @@ Install R on your system or on the sequana server and install BiocManager
 if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 ```
+
+Install some of the packages we will be using:
+-
+-
+-
+-
+-
+-
+-
+-
+-
 
 ## Part 5: preprocessing:
 For Böstrom there is a single fastq file per sample.
