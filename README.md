@@ -120,9 +120,9 @@ To connect using ssh, we will use ssh-keys.
 
 What are ssh-keys?(https://jumpcloud.com/blog/what-are-ssh-keys)
 
-> **Exercise 1:** Generate a pair of ssh-keys. Send the public key to Ben for installation on the server along with your username. N.B. if working on Windows, try to use the Open SSH Client on the command line with the command: `ssh-keygen`. For both Windows and mac, the key should be saved to the default location which should be a hidden folder called `.ssh` inside your user's base directory.
+> **Exercise:** Generate a pair of ssh-keys. Send the public key to Ben for installation on the server along with your username. N.B. if working on Windows, try to use the Open SSH Client on the command line with the command: `ssh-keygen`. For both Windows and mac, the key should be saved to the default location which should be a hidden folder called `.ssh` inside your user's base directory.
 
-> **Exercise 2:** ssh into the sequana server once Ben has installed your SSH keys. Ask Ben for sequana's IP. (optional) [set up](https://linuxize.com/post/using-the-ssh-config-file/) a 'config' file in '.ssh' so that you don't have to enter your IP and username every time you want to 
+> **Exercise:** ssh into the sequana server once Ben has installed your SSH keys. Ask Ben for sequana's IP. (optional) [set up](https://linuxize.com/post/using-the-ssh-config-file/) a 'config' file in '.ssh' so that you don't have to enter your IP and username every time you want to 
 
 ## Part 2: Installing software in your user directory
 We'll need some programmes if we're going to do some work.
@@ -151,17 +151,17 @@ We will download the data from the [European Nucleotide Archive (ENA)](https://w
 
 We will use their [File Downloader Command Line Tool](https://ena-docs.readthedocs.io/en/latest/retrieval/file-download.html#using-ena-file-downloader-command-line-tool) that is hosted on GitHub [here](https://github.com/enasequence/ena-ftp-downloader/releases).
 
-> **Exercise 3**: Install the ENA File Downloader in your home directory and make sure you can get it to execute.
+> **Exercise:** Install the ENA File Downloader in your home directory and make sure you can get it to execute.
 
 We will work with this program later on to download data. But first, let's meet another option for installing programs: [Conda](https://conda.io/projects/conda/en/latest/index.html) - a package manager that allows you to create multiple environments, often specific to a given project or analysis, that can have different packages and programs installed in them.
 
 See [here](https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html) for managing environmens with conda. Conda can be installed in your home directory without root access (sudo access) and enables you to install programs locally.
 
-> **Exercise 3**: Install [miniconda](https://docs.conda.io/en/latest/miniconda.html) in your sequana home directory. If you're not sure which options to select, ask! Once it's installed you'll need to start a new ssh session.
+> **Exercise:** Install [miniconda](https://docs.conda.io/en/latest/miniconda.html) in your sequana home directory. If you're not sure which options to select, ask! Once it's installed you'll need to start a new ssh session.
 
 Great! We now have the ability to create environments and install programs locally using the 'conda' command.
 
-> **Exercise 4**: Create a new environment called `kallisto_env` and in it install: 
+> **Exercise**: Create a new environment called `kallisto_env` and in it install: 
 > - [kallisto](https://anaconda.org/bioconda/kallisto)
 >
 > Verify that you can run kallisto
@@ -170,7 +170,7 @@ We will use this environment later on.
 ## Part 3: Fetching data, directory permissions and working with symlinks
 Now it's time to get some data.
 
-> **Exercise 5**: Find where the data from each of the studies is deposited. Use the ENA File Downloader that you installed earlier to download data from ONE of the samples from the Böstrom et al 2017 paper.
+> **Exercise:** Find where the data from each of the studies is deposited. Use the ENA File Downloader that you installed earlier to download data from ONE of the samples from the Böstrom et al 2017 paper.
 
 Wow! Great work, you've now got real sequencing data in your home directory.
 
@@ -178,17 +178,17 @@ I only asked you to get 1 sample's worth of data because it would be redundant t
 
 And guess what, I've already downloaded the data we need. It's in the following directory on sequana: `/home/VTK/bostrom/raw_reads`.
 
-> **Exercise 6**: Go take a look at the data. How big is the data?
+> **Exercise:** Go take a look at the data. How big is the data?
 
 One of the great things about operating on a Linux system is that its designed to allow concurrent access by multiple users.
 
-> **Exercise 7**: Take a look at the permissions for the data directory. What does it tell you about access to the directory? What is a group in Linux? Which groups are you a member of?
+> **Exercise**: Take a look at the permissions for the data directory. What does it tell you about access to the directory? What is a group in Linux? Which groups are you a member of?
 
 Now you know where the data is, you can either work directly with that data, or an easier way is to create a shortcut to that data in your own directory. For this purpose, Linux has symbolic links.
 
 [What is a symbolic link (symlink)?](https://www.futurelearn.com/info/courses/linux-for-bioinformatics/0/steps/201767#:~:text=A%20symlink%20is%20a%20symbolic,directory%20in%20any%20file%20system.)
 
-> **Exercise 8**: Create a directory structure in your home directory to hold the data. Create symlinks to populate the directories with symlinks to the sequencing files.
+> **Exercise**: Create a directory structure in your home directory to hold the data. Create symlinks to populate the directories with symlinks to the sequencing files.
 
 ## Part 4: Some key sequence data formats - fasta, fastq, fastq.gz, sam and bam
 
@@ -200,7 +200,7 @@ There are a few key formats that you should be familiar with in the realms of co
 
 [What are sam and bam files?](https://www.zymoresearch.com/blogs/blog/what-are-sam-and-bam-files#:~:text=SAM%20files%20are%20a%20type,the%20examples%20for%20this%20section.)
 
-That brings us to the end of the 'first day'. How long did it take us. Hopefully we didn't use up the full day because tomorrow we'll be doing some R in the latter half of the day. So for the remainder of today, I'd like you to spend some time getting familiar with R. This means getting it installed on your system. Either install Rstudio or Visual Studio Code. I'm here to help. Once you have that installed
+That brings us to the end of the 'first day'. How long did it take us? Hopefully we didn't use up the full day because tomorrow we'll be doing some R in the latter half of the day. So for the remainder of today, I'd like you to spend some time getting familiar with R. This means getting it installed on your system. Either install [Rstudio](https://posit.co/) or [Visual Studio Code](https://code.visualstudio.com/) (my personal favourite). I'm here to help. Once you have that installed R install some of the packages we will be using tomorrow (see the requirement section). Then, if you're not already comfortable with R, or if you're a little rusty, use this time to do a brief R tutorial that covers the basics. R is a fantastic language to get familiar with as a biologist.
 
 # DAY 2: Böstrom et al 2017
 
@@ -213,28 +213,29 @@ if (!require("BiocManager", quietly = TRUE))
 ```
 
 Install some of the packages we will be using:
--
--
--
--
--
--
--
--
--
+- dplyr
+- tidyverse
+- GenomicFeatures
+- RMariaDB
+- stringr
+- tximport
+- DESeq2
+- pheatmap
+- vsn
+- matrixStats
 
 ## Part 5: preprocessing:
 For Böstrom there is a single fastq file per sample.
 
-> **Exercise 7**: Open up the fastq file and have a look at it. Can you deduce the structure of the fastq format from this file? What is the /1 at the end of the reads? How about those quality scores, what use will we make of them?
+> **Exercise**: Open up the fastq file and have a look at it. Can you deduce the structure of the fastq format from this file? What is the /1 at the end of the reads? How about those quality scores, what use will we make of them?
 
 It's common practice to remove low quality bases at the beginning and ends of reads and to check for and remove adapters?
 
-> **Exercise 8**: Discuss: Why are there still adapters in my sequences if the sequencing starts after the adapters?
+> **Exercise**: Discuss: Why are there still adapters in my sequences if the sequencing starts after the adapters?
 
 There are a couple of options for removing low quality bases and adapters.
 
-> **Exercise 8**: Have a look at a couple of the options: [fastqc](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/), [fastp](https://github.com/OpenGene/fastp). [trimmomatic](http://www.usadellab.org/cms/?page=trimmomatic). Specifically, see if you can resolve any differences between the programs. Is one easier to use than the others? Do they all have the same functionality? Let's say you want to remove adapters and trim for quality score at the beginning and end of the read at a phred score of 20.
+> **Exercise**: Have a look at a couple of the options: [fastqc](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/), [fastp](https://github.com/OpenGene/fastp). [trimmomatic](http://www.usadellab.org/cms/?page=trimmomatic). Specifically, see if you can resolve any differences between the programs. Is one easier to use than the others? Do they all have the same functionality? Let's say you want to remove adapters and trim for quality score at the beginning and end of the read at a phred score of 20.
 
 [What is a phred score?](https://en.wikipedia.org/wiki/Phred_quality_score)
 
@@ -242,7 +243,7 @@ I've worked with each of these over the years. For ease of use and speed, I like
 
 > **Exercise 9**: Install fastp and run it on each of your samples. Set the quality threshold to 20.
 
-## Part XXX: Getting files in and out of the server
+## Part 6: Getting files in and out of the server
 Obviously, there will be many occasions where you want to either load files on to the server, or take files off of their server.
 
 We will cover that now.
@@ -251,16 +252,16 @@ The most common way to do this is using [scp](https://linuxize.com/post/how-to-u
 
 > **Exercise 10**: Inspect the output of fastp. Pull down the html file to inspect it.
 
-## Part XXX: pseudo-aligning with kallisto
+## Part 7: preparing the reference
 
 > **Exercise 11**: Discuss: What do you think is the next step after pre-processing? It's important to have a good overview of what you are trying to achieve and how.
 
 It's time to map and count!
 
-When it comes to mapping we have several options open to us.
+When it comes to mapping we have several options available to us.
 
 These can largely be categorized in two:
-- Map the reads to a genome and them count them
+- map the reads to a genome and them count them
 - pseudo-align the reads to a transcriptome
 
 [What is mapping?](https://training.galaxyproject.org/training-material/topics/sequence-analysis/tutorials/mapping/tutorial.html)
@@ -269,25 +270,62 @@ These can largely be categorized in two:
 
 [What is pseudo-alignment?](https://tinyheero.github.io/2015/09/02/pseudoalignments-kallisto.html)
 
-> **Exercise**: Discuss: Understanding that pseudo aligners generally map to a transcriptome whereas tradition splice-aware mappers such as STAR map to a genome, can you think of a down side to work with a pseudo-aligner?
+> **Exercise**: Discuss: Understanding that pseudo aligners generally map to a transcriptome whereas tradition splice-aware mappers such as STAR map to a genome, can you think of a down side to working with a pseudo-aligner?
 
-Were going to go the pseudo-alignment route with kallisto: it's fast and does exactly what we need. As we're working with Human, there is a well established set of transcripts to map to (the transcriptome).
+We're going to go the pseudo-alignment route with [kallisto](https://pachterlab.github.io/kallisto/): it's fast and does exactly what we need. As we're working with Human, there is a well established set of transcripts to map to (the transcriptome).
 
-I've downloaded the GRC38 transcriptome here: `/home/humebc/VTK_22/reference/kallisto_GRC38_reference/GRCh38_latest_rna.fna.gz`
+I've downloaded the Ensembl transcriptome (release 107) from [here](https://ftp.ensembl.org/pub/release-107/fasta/homo_sapiens/cdna/). I've downloaded it to here: `/home/VTK/bostrom/reference/`
 
 > **Exercise**: symlink the transcriptome into your directory structure somewhere.
+
+We need to do some work to this reference before we use it.
+
+Later on we're going to make a file that maps transcript name to gene name. Don't worry about what that means just now. But what we do need to do is remove the ".1" or ".X" that follows the Ensembl identifier.
+
+We're going to do this using [AWK](https://en.wikipedia.org/wiki/AWK). Even knowing about AWK makes you a next level geek. AWK is sort of a programming language like R or Python. But it acts in a very special way, line by line. The command we're going to run is VERY simple but it gets the job done.
+
+> **Exercise**: In the directory where you have symlinked the reference file to, decompress the fasta file: `gzip -d Homo_sapiens.GRCh38.cdna.all.fa.gz`
+>
+> Then run the following awk command
+
+```awk -F '.' '{print $1}' Homo_sapiens.GRCh38.cdna.all.fa | head```
+
+> What is this doing
+> Now modify the command so that you save the full result:
+>
+> ```awk -F '.' '{print $1}' Homo_sapiens.GRCh38.cdna.all.fa > Homo_sapiens.GRCh38.cdna.all.short_name.fa```
+
+This new file that we've created `Homo_sapiens.GRCh38.cdna.all.short_name.fa` is the file that we're going to work with for doing our analysis.
+
+> **Exercise:** Gzip the newly created file.
+
+## Part 8: indexing the reference
 
 Before we map or align, we index our reference.
 
 [Why index?](https://www.biostars.org/p/212594/)
 
-> **Exercise**: Using your kallisto installation that you did earlier, index the reference GRCh38 transcriptome.
+> **Exercise**: Using your kallisto installation that you did earlier, index the reference 'short_name' transcriptome.
 
 [What is the GRCh38 assembly?](https://gatk.broadinstitute.org/hc/en-us/articles/360035890951-Human-genome-reference-builds-GRCh38-or-hg38-b37-hg19)
 
-> **Exercise**: Now perform the pseudo-alignment following the kallisto documentation.
+## Part 9: pseudo-alignment with kallisto
 
-Have a look at the output directory of kallisto count. Take a look in some of the files. If you're not familiar with a file's extension, google it.
+> **Exercise**: Now perform the pseudo-alignment following the kallisto documentation. Use 10 cores each time you run kallisto count. You'll need to specify some extra information to kallisto. See if you can figure out what these are. Don't be afraid to have a go running it.
+
+## part 10: Nextflow!
+Let's be honest, running kallisto once on each of the samples is super annoying. I guess we could generate a bash script to do it for us, but that would be pretty complicated and it would likely run in parallel, and we'd still have to manually take care of the directory structures for the results, and keep track of which versions of the software we used etc. etc. etc.
+
+What if I told you there was a better way?!
+
+> **Exercise**: Discuss: Do we have the time and/or inclination to learn a little [Nextflow](https://www.nextflow.io/docs/latest/getstarted.html)?
+
+If you think we do, then let's do what we've just done but in a simple nextflow script. Either follow along with Ben, or have a go yourself.
+
+
+## Part 11: importing your data into R
+
+Once you'ce successfully run kallisto have a look at the output directory of kallisto count. Take a look in some of the files. If you're not familiar with a file's extension, google it.
 
 In abundance.csv you'll see there is a column tpm.
 
@@ -303,21 +341,17 @@ We'll use this to import our data. As part of importing the data we will collaps
 
 You will find that there is considerable documentation on the above, both as part of the tximport documentation but also with the [DESEQ2](https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html) program that we will use to do the differential expression analysis.
 
-I've created a file that contains the meta information for the samples here:
+I've created a file that contains the meta information for the samples here: `/home/VTK/bostrom/bostrom_meta.csv`.
 
 I generated it form [this](https://www.ncbi.nlm.nih.gov/Traces/study/?acc=PRJNA413699&o=acc_s%3Aa&s=SRR6150369,SRR6150370,SRR6150371,SRR6150372,SRR6150373,SRR6150374,SRR6150375,SRR6150376,SRR6150377,SRR6150378,SRR6150379,SRR6150380,SRR6150381,SRR6150382,SRR6150383,SRR6150384,SRR6150385,SRR6150386,SRR6150387,SRR6150388,SRR6150389). You'll notice that I combined the reads from the same sample.
 
-> **Exercise**: import your outputs from kallisto into R so that we can use DESEQ2 to analyse them. If you're up for the challenge, have a go at doing it yourself following the DESEQ2 documentation. Else follow along with me.
+> **Exercise**: import your outputs from kallisto into R so that we can use DESEQ2 to analyse them. If you're up for the challenge, have a go at doing it yourself following the [DESeq2 documentation](https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#input-data). Else follow along with me.
 
 Now it's time for us to create the DESeq2 object and perform the analysis.
 
-The DESeq2 documentation is fantastic and I would suggest you open it up now and follow along. To create the first figure from the paper we'll be using some of the standard approaches in this document.
+The DESeq2 documentation is fantastic and I would suggest you open it up now and follow along. To create the first figure from the paper we'll be using some of the standard approaches in this document. OR WILL WE!
 
 > **Exercise**: Follow along with me or with the DESeq2 documentation to produce a heat map similar to the one in Bostrom et al for the HeLa cells in the different cell cycle stages.
-
-
-
-
 
 # Day 3: MacParland et al 2018
 
