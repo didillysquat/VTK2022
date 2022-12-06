@@ -37,7 +37,7 @@ samples$sample_name = stringr::str_c(samples$dir_name, "_", samples$cell_type, "
 names(files) <- samples$sample_name
 rownames(samples) = samples$sample_name
 
-# Finally we can do use tximport to read in the abundance tables
+# Finally we can use tximport to read in the abundance tables
 txi = tximport(files, type = "kallisto", tx2gene = tx2gene)
 
 # Create the DESEQ2 object

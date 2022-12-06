@@ -225,7 +225,7 @@ Install some of the packages we will be using:
 - matrixStats
 
 ## Part 5: preprocessing:
-For Böstrom there is a single fastq file per sample.
+For Boström there is a single fastq file per sample.
 
 > **Exercise**: Open up the fastq file and have a look at it. Can you deduce the structure of the fastq format from this file? What is the /1 at the end of the reads? How about those quality scores, what use will we make of them?
 
@@ -235,26 +235,36 @@ It's common practice to remove low quality bases at the beginning and ends of re
 
 There are a couple of options for removing low quality bases and adapters.
 
-> **Exercise**: Have a look at a couple of the options: [fastqc](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/), [fastp](https://github.com/OpenGene/fastp). [trimmomatic](http://www.usadellab.org/cms/?page=trimmomatic). Specifically, see if you can resolve any differences between the programs. Is one easier to use than the others? Do they all have the same functionality? Let's say you want to remove adapters and trim for quality score at the beginning and end of the read at a phred score of 20.
+> **Exercise**: Have a look at a couple of the options: [fastqc](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/), [fastp](https://github.com/OpenGene/fastp) and [trimmomatic](http://www.usadellab.org/cms/?page=trimmomatic). Specifically, see if you can resolve any differences between the programs. Is one easier to use than the others? Do they all have the same functionality? Let's say you want to remove adapters and trim for quality score at the beginning and end of the read at a phred score of 20.
 
 [What is a phred score?](https://en.wikipedia.org/wiki/Phred_quality_score)
 
 I've worked with each of these over the years. For ease of use and speed, I like fastp.
 
-> **Exercise 9**: Install fastp and run it on each of your samples. Set the quality threshold to 20.
+> **Exercise**: Although we downloaded all of the sequencing files from all of the boström samples, we're only interested in those samples that are HeLa cells. Delete the SymLinks you created that relate to the U20S cells. Do you remeber where to find the information about which SRRs relate to which samples? Do you remember the bostrom_meta.csv file that I created. Perhaps you could look in there also?
 
-## Part 6: Getting files in and out of the server
+> **Exercise**: Install fastp and run it on each of the samples. Set the quality threshold to 20. Think about where the outputs from running fastp will go.
+
+## part 6: Nextflow!
+Let's be honest, running fastp once on each of the samples is super annoying. I guess we could generate a bash script to do it for us, but that would be pretty complicated and it would likely run in parallel, and we'd still have to manually take care of the directory structures for the results, and keep track of which versions of the software we used etc. etc. etc. And this was just for one bioinformatic tool! A typical pipeline may have upwards of 10 tools used in sequence, with the outputs combined in certain ways.
+
+What if I told you there was a better way?!
+
+There is! It's called [Nextflow](https://www.nextflow.io/docs/latest/getstarted.html).
+
+> **Exercise**: With Ben's help, write a Nextflow script that will do what we've just done. What do you think? If you were to continue with bioinformatics, would you invest the time to learn Nextflow. What are some of the other benefits of working with Nextflow?
+
+## Part 7: Getting files in and out of the server
 Obviously, there will be many occasions where you want to either load files on to the server, or take files off of their server.
 
 We will cover that now.
 
 The most common way to do this is using [scp](https://linuxize.com/post/how-to-use-scp-command-to-securely-transfer-files/) (secure copy).
 
-> **Exercise 10**: Inspect the output of fastp. Pull down the html file to inspect it.
+> **Exercise**: Inspect the output of fastp. Pull down the html file to inspect it.
+## Part 8: preparing the reference
 
-## Part 7: preparing the reference
-
-> **Exercise 11**: Discuss: What do you think is the next step after pre-processing? It's important to have a good overview of what you are trying to achieve and how.
+> **Exercise**: Discuss: What do you think is the next step after pre-processing? It's important to have a good overview of what you are trying to achieve and how.
 
 It's time to map and count!
 
@@ -276,7 +286,7 @@ We're going to go the pseudo-alignment route with [kallisto](https://pachterlab.
 
 I've downloaded the Ensembl transcriptome (release 107) from [here](https://ftp.ensembl.org/pub/release-107/fasta/homo_sapiens/cdna/). I've downloaded it to here: `/home/VTK/bostrom/reference/`
 
-> **Exercise**: symlink the transcriptome into your directory structure somewhere.
+> **Exercise**: symlink the transcriptome into your directory structure somewhere. Look at the first 10 or so lines of the transciptome using `less` piped into `head`.
 
 We need to do some work to this reference before we use it.
 
@@ -284,20 +294,18 @@ Later on we're going to make a file that maps transcript name to gene name. Don'
 
 We're going to do this using [AWK](https://en.wikipedia.org/wiki/AWK). Even knowing about AWK makes you a next level geek. AWK is sort of a programming language like R or Python. But it acts in a very special way, line by line. The command we're going to run is VERY simple but it gets the job done.
 
-> **Exercise**: In the directory where you have symlinked the reference file to, decompress the fasta file: `gzip -d Homo_sapiens.GRCh38.cdna.all.fa.gz`
->
-> Then run the following awk command
+> **Exercise**: In the directory where you have symlinked the reference file to, run the following awk command
 
-```awk -F '.' '{print $1}' Homo_sapiens.GRCh38.cdna.all.fa | head```
+```less Homo_sapiens.GRCh38.cdna.all.fa.gz | awk -F '.' '{print $1}' | head```
 
-> What is this doing
-> Now modify the command so that you save the full result:
+> What is this doing?
+> Now modify the command so that you write the full results to a new file:
 >
-> ```awk -F '.' '{print $1}' Homo_sapiens.GRCh38.cdna.all.fa > Homo_sapiens.GRCh38.cdna.all.short_name.fa```
+> ```less Homo_sapiens.GRCh38.cdna.all.fa.gz | awk -F '.' '{print $1}' > Homo_sapiens.GRCh38.cdna.all.short_name.fa```
 
 This new file that we've created `Homo_sapiens.GRCh38.cdna.all.short_name.fa` is the file that we're going to work with for doing our analysis.
 
-> **Exercise:** Gzip the newly created file.
+> **Exercise:** Gzip the newly created file using `pigz`. If pigz isn't installed, install it.
 
 ## Part 8: indexing the reference
 
@@ -305,23 +313,13 @@ Before we map or align, we index our reference.
 
 [Why index?](https://www.biostars.org/p/212594/)
 
-> **Exercise**: Using your kallisto installation that you did earlier, index the reference 'short_name' transcriptome.
+> **Exercise**: Using your kallisto_env environment that you made earlier, index the reference 'short_name' transcriptome.
 
 [What is the GRCh38 assembly?](https://gatk.broadinstitute.org/hc/en-us/articles/360035890951-Human-genome-reference-builds-GRCh38-or-hg38-b37-hg19)
 
 ## Part 9: pseudo-alignment with kallisto
 
-> **Exercise**: Now perform the pseudo-alignment following the kallisto documentation. Use 10 cores each time you run kallisto count. You'll need to specify some extra information to kallisto. See if you can figure out what these are. Don't be afraid to have a go running it.
-
-## part 10: Nextflow!
-Let's be honest, running kallisto once on each of the samples is super annoying. I guess we could generate a bash script to do it for us, but that would be pretty complicated and it would likely run in parallel, and we'd still have to manually take care of the directory structures for the results, and keep track of which versions of the software we used etc. etc. etc.
-
-What if I told you there was a better way?!
-
-> **Exercise**: Discuss: Do we have the time and/or inclination to learn a little [Nextflow](https://www.nextflow.io/docs/latest/getstarted.html)?
-
-If you think we do, then let's do what we've just done but in a simple nextflow script. Either follow along with Ben, or have a go yourself.
-
+> **Exercise**: Now perform the pseudo-alignment following the kallisto documentation and incorporating this into your nextflow script. Use 10 cores each time you run kallisto count. You'll need to specify some extra information to kallisto. See if you can figure out what these are. Don't be afraid to have a go running it.
 
 ## Part 11: importing your data into R
 
@@ -351,7 +349,7 @@ Now it's time for us to create the DESeq2 object and perform the analysis.
 
 The DESeq2 documentation is fantastic and I would suggest you open it up now and follow along. To create the first figure from the paper we'll be using some of the standard approaches in this document. OR WILL WE!
 
-> **Exercise**: Follow along with me or with the DESeq2 documentation to produce a heat map similar to the one in Bostrom et al for the HeLa cells in the different cell cycle stages.
+> **Exercise**: Have a think about how we create a heat map like the one they're produced in the paper. Have a look at the methods of the paper. Critically appraise them. Do you think they are sufficient to be able to reporduce the findings?
 
 # Day 3: MacParland et al 2018
 
