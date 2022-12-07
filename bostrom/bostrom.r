@@ -1,5 +1,4 @@
 # All R code associated with the processing of the böstrom data
-
 library(dplyr)
 library(tidyverse)
 library(GenomicFeatures)
@@ -11,15 +10,16 @@ library("pheatmap")
 library("vsn")
 library(matrixStats)
 
+# Create a tx2gene file that is compatible with the reference genome
 txdb <- makeTxDbFromEnsembl("Homo sapiens", release=107)
 k <- keys(txdb, keytype = "TXNAME")
 tx2gene <- AnnotationDbi::select(txdb, k, "GENEID", "TXNAME")
 head(tx2gene)
 
-# Load the dataframe 
+# Load the meta information sample dataframe 
 samples = read.csv("/home/humebc/VTK_22/bostrom/bostrom_meta.csv", header=TRUE)
 
-# We're actually only interested in HeLa-fucci
+# We're actually only interested in HeLa-fucci cells
 # Filter out the U20S cells so that we only carry the HeLa cells on in the analysis
 samples = samples %>% dplyr::filter(cell_type=="HeLa")
 samples = samples %>% mutate(cell_type = as.factor(cell_type), cell_cycle_stage = as.factor(cell_cycle_stage), rep = as.factor(rep))
@@ -38,6 +38,7 @@ names(files) <- samples$sample_name
 rownames(samples) = samples$sample_name
 
 # Finally we can use tximport to read in the abundance tables
+# and perform the normalizations
 txi = tximport(files, type = "kallisto", tx2gene = tx2gene)
 
 # Create the DESEQ2 object
@@ -117,27 +118,33 @@ dds_counts_w_av = dds_counts %>% dplyr::mutate(
 dds_counts_only_av = dds_counts_w_av %>% select(c(s_av, g1_av, g2_av))
 dds_counts_only_av_sig = dds_counts_only_av[sig_genes_unique,]
 
-# Then given that there was complete overlap, we can plot the genes in order of abundance
+# We can plot the genes in order of abundance
 # but first we will want to normalize the data by row so that we can pre-order by post
 # normalized abundance.
+
+# Plot it up without normalization first.
 head(dds_counts_only_av_sig)
 dds_counts_only_av_sig_s1_ordered = dds_counts_only_av_sig[order(dds_counts_only_av_sig$s_av, decreasing = T),]
 pheatmap(dds_counts_only_av_sig_s1_ordered[1:10,],cluster_rows=FALSE, show_rownames=FALSE, cluster_cols=FALSE)
 
 
+# We need to standardize the data by row and then order and then plot
 RowSD <- function(x) {
   sqrt(rowSums((x - rowMeans(x))^2)/(dim(x)[2] - 1))
 }
-# We need to standardize the data by row and then order and then plot
+
+# Create columns of the mean and standard deviation
 dds_counts_only_av_sig_stand = dds_counts_only_av_sig %>% 
   mutate(mean = (s_av + g1_av + g2_av)/3, stdev = RowSD(cbind(s_av, g1_av, g2_av)))
 
+# Finally normalise the averages.
 dds_counts_standardized = dds_counts_only_av_sig_stand %>% mutate(
     s_std = (s_av-mean)/stdev,
     g1_std = (g1_av-mean)/stdev,
     g2_std = (g2_av-mean)/stdev
     ) %>% dplyr::select(s_std, g1_std, g2_std) %>% arrange(desc(s_std))
 
+# Then plot the heat map.
 pheatmap(dds_counts_standardized, cluster_rows=FALSE, show_rownames=FALSE, cluster_cols=FALSE)
 
 # At this point I officially gave up! They just don't seem to agree.
