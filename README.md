@@ -307,7 +307,7 @@ This new file that we've created `Homo_sapiens.GRCh38.cdna.all.short_name.fa` is
 
 > **Exercise:** Gzip the newly created file using `pigz`. If pigz isn't installed, install it.
 
-## Part 8: indexing the reference
+## Part 9: indexing the reference
 
 Before we map or align, we index our reference.
 
@@ -321,7 +321,7 @@ Before we map or align, we index our reference.
 
 > **Exercise**: Now perform the pseudo-alignment following the kallisto documentation and incorporating this into your nextflow script. Use 10 cores each time you run kallisto count. You'll need to specify some extra information to kallisto. See if you can figure out what these are. Don't be afraid to have a go running it.
 
-## Part 11: importing your data into R
+## Part 10: importing your data into R
 
 Once you'ce successfully run kallisto have a look at the output directory of kallisto count. Take a look in some of the files. If you're not familiar with a file's extension, google it.
 
@@ -365,7 +365,7 @@ You'll be working with R to analyze the outputs of the scRNA-seq data analysis. 
 - languageserver
 
 Alternatively you can run R on the computation server (where it is already installed). But you'll likely want to connect to it using [Visual Studio Code](https://code.visualstudio.com/download). So install this on your local machine and install the R extension and the SSH extension.
-## Part XXX: Running cellranger bamtofastq
+## Part 11: Running cellranger bamtofastq
 
 TODO incorporate down sampling into this. If the students can down sample then they can work with their own sets of files and fully develop a Nextflow pipeline.
 
@@ -384,7 +384,7 @@ Take a look at the data we downloaded from MacParland. You'll notice that it's i
 
 As we touched on earlier, bam format is binary and not human readable. In order to read a bam file you will have to convert it to sam format.
 
-> **Exercise XXX**: Use [samtools](http://www.htslib.org/) to look at the first 10 lines of the bam files in human readable format. How will you install it? Would you use conda or install it from source?
+> **Exercise**: Use [samtools](http://www.htslib.org/) to look at the first 10 lines of the bam files in human readable format. How will you install it? Would you use conda or install it from source?
 
 To run the Cell Ranger analysis of our data we want to run the `cellranger count` method. Take a look at the diagram in the below link to see what it is doing.
 
@@ -394,37 +394,37 @@ To run the Cell Ranger analysis of our data we want to run the `cellranger count
 
 As input, `cellranger count` takes fastq files. But we have bam files. Fortunately, Cell Ranger also contains a program to recapitulate the fastq files from bam files. It is helpfully named [bamtofastq](https://support.10xgenomics.com/docs/bamtofastq). We can run this now.
 
-> **Excercise XXX**: Install cellranger. Find the bamtofastq executable and make sure you can get it to run.
+> **Excercise**: Install cellranger. Find the bamtofastq executable and make sure you can get it to run.
 
 We won't run it on the actual data because that would take a lot of time and resources that we don't have available to us right now. Instead I've recreated the output files here: `/home/humebc/VTK_22/macparland/results/bamtofastq`
 
-## Part XXX: Running cellranger count
+## Part 12: Running cellranger count
 Now that we have the fastq files we can run the `cellranger count` program to generate the count tables.
 
-> **Excercise XXX**: Run `cellranger count` on one set of the fastq files. You'll need to use a reference transcriptome. These come prebuilt for certain organisms (e.g. Human) and I have already downloaded it for you. It is here: `/home/humebc/VTK_22/reference/refdata-gex-GRCh38-2020-A`
+> **Excercise**: Run `cellranger count` on one set of the fastq files. You'll need to use a reference transcriptome. These come prebuilt for certain organisms (e.g. Human) and I have already downloaded it for you. It is here: `/home/humebc/VTK_22/reference/refdata-gex-GRCh38-2020-A`
 
 An explanation of the output files can be found [here](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/output/gex-outputs)
 
-> **Exercise XXX**: Examine the output of `cellranger count` and compare it to the above documentation.
+> **Exercise**: Examine the output of `cellranger count` and compare it to the above documentation.
 
-> **Exercise XXX**: Transfer the .html file that was generated to your local machines hard drive. Open it up.
+> **Exercise**: Transfer the .html file that was generated to your local machines hard drive. Open it up.
 
-> **Exercise XXX**: If you installed the Loupe browser, open up the Loupe file on your local machine. If you didn't, watch me!
+> **Exercise**: If you installed the Loupe browser, open up the Loupe file on your local machine. If you didn't, watch me!
 
-## Part XXX: Running cellranger aggr
+## Part 13: Running cellranger aggr
 
 Great! Now we have one sample analyzed, but what about the other samples?
 
 This is where `cellranger aggr` is used. [Here's](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/using/aggregate) the documentation on running aggr. And [here's](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/output/aggr-outputs) the documentation for the outputs.
 
-> **Exercise XXX**: Do what's necessary to run `cellranger aggr`. Is it annoying having to run each sample individually on the command line? Imagine if you had 85 samples? Now how annoying is it? Do you think there are better approaches to running many samples, not just for Cell Ranger, but in general?
+> **Exercise**: Do what's necessary to run `cellranger aggr`. Is it annoying having to run each sample individually on the command line? Imagine if you had 85 samples? Now how annoying is it? Do you think there are better approaches to running many samples, not just for Cell Ranger, but in general?
 
 The documentation of the output structure for cellranger aggr is [here](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/output/aggr-outputs).
 
 
-> **Exercise XXX**: Again, pull down the .html and cloupe files to visualize the results. Can you see the addition of the additional samples?
+> **Exercise**: Again, pull down the .html and cloupe files to visualize the results. Can you see the addition of the additional samples?
 
-## Part XXX: Preparing R
+## Part 14: Preparing R
 We've done the heavy computing on the computational server. If you remember, the sequencing files that we started with were very large and the computation would have taken a very long time on your laptop - if it was possible at all.
 
 However, the files that we've ended up with are not so large - about 100MB.
@@ -441,14 +441,14 @@ If you choose to run on your local machine, then you'll need to install R and al
 
 If you choose work on the server then you can either start up an R session on the command line (`R`) or you can use an IDE such as Visual Studio Code (recommended) to connect over SSH. This will make the work much easier for you.
 
-> **Exercise XXX**: Get your chosen environment setup for the remainder of the analysis in R.
+> **Exercise**: Get your chosen environment setup for the remainder of the analysis in R.
 
-## Part XXX: scRNA-seq analysis with Seurat in R
+## Part 15: scRNA-seq analysis with Seurat in R
 Seurat is a package used to analyze scRNA-seq data. It has gained great popularity in recent years and is widely used by the academic community and industry alike.
 
 Much of the work we'll be doing to recreate the results of the MacParland analysis are well documented by the creators of the Seurat package. For example, much of what we'll be doing is covered in their [pbmc3K tutorial](https://satijalab.org/seurat/articles/pbmc3k_tutorial.html).
 
-> **Exercise XXX: Look through the methods of the MacParland paper to see where we're at with the analysis. Critically appraise how they've written up the methods. Is it easy to follow? Is there enough detail?
+> **Exercise:** Look through the methods of the MacParland paper to see where we're at with the analysis. Critically appraise how they've written up the methods. Is it easy to follow? Is there enough detail?
 
 The first stage of analysis in R is to create a Seurat object from the features/barcode table that we created using the cellranger aggr command.
 
@@ -506,14 +506,14 @@ Finally, we want to perform the filtering out cells from the data in the same wa
 - filter out cell with < 1500 UMIs
 - filter out cells with a high percentage of counts of mitochondrial origin
 
-> **Exercise XXX**: Filter out those cells. Have a look at the pbmc3K tutorial for how to do this.
+> **Exercise**: Filter out those cells. Have a look at the pbmc3K tutorial for how to do this.
 
 Now that we have completed the pre-processing of the data.
 
-> **Exercise XXX**: Visualize the data again to make sure that the filtering has been applied. Has it?
+> **Exercise**: Visualize the data again to make sure that the filtering has been applied. Has it?
 
-> **Exercise XXX**: How would we produce the figure from the paper that shows library size plotted against mitochrondrial transcript percent?
-## Part XXX: Normalization and dimensionality reduction
+> **Exercise**: How would we produce the figure from the paper that shows library size plotted against mitochrondrial transcript percent?
+## Part 16: Normalization and dimensionality reduction
 
 You'll hear the term normalization a lot in computational biology and data science.
 
@@ -532,9 +532,9 @@ From here we are interested in clustering the data. That is assigning each of th
 
 To do this clustering we need to get an idea for how related each of the cells are to all of the other cells.
 
-> **Exercise XXX**: Discuss, what are we basing this similarity on?
+> **Exercise**: Discuss, what are we basing this similarity on?
 
-> **Exercise XXX**: Inspect the data, how many cells do we have? How many features?
+> **Exercise**: Inspect the data, how many cells do we have? How many features?
 
 Generally researchers choose to work on a subset of features for performing similarity analyses and clustering. This is to minimise computational load. All features could be used but do you think that all features provide the same ammount of information with regards to how similar cells are?
 
@@ -601,9 +601,9 @@ One of the simplest ways to assess this is with an elbow plot:
 ```
 ElbowPlot(mc, ndims=35)
 ```
-> **Exercise XXX**: How many PCs should we move forwards with? How many did the authors choose?
+> **Exercise**: How many PCs should we move forwards with? How many did the authors choose?
 
-## Part XXX: Clustering, non-linear dimensional reduction and identifying cluster biomarkers
+## Part 17: Clustering, non-linear dimensional reduction and identifying cluster biomarkers
 Seurat implements a graph-based approach to clustering.
 
 Cells are embeded in a graph structure - for example a K-nearest neighbor (KNN) graph, with edges drawn between cells with similar feature expression patterns, and then attempt to partition this graph into highly interconnected ‘quasi-cliques’ or ‘communities’.
