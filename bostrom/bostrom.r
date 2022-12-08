@@ -53,18 +53,18 @@ res_ordered = res[order(res$log2FoldChange),]
 
 # Take a look at the other result names available 
 # resultsNames(dds)
-# res <- results(dds, contrast=c("cell_cycle_stage", "G2", "G1"))
+# alt_res <- results(dds, contrast=c("cell_cycle_stage", "G2", "G1"))
 
 # resOrdered <- res[order(res$pvalue),]
 # summary(res)
 
 
 # Let's perform the shrinkage so that we can see what effect it has.
-resLFC <- lfcShrink(dds, coef="cell_cycle_stage_G2_vs_G1", type="apeglm")
+resLFC <- lfcShrink(dds, coef="cell_cycle_stage_S_vs_G1", type="apeglm")
 
-# # Let's compare the shrinkage results
-# plotMA(res, ylim=c(-2,2))
-# plotMA(resLFC, ylim=c(-2,2))
+# Let's compare the shrinkage results
+plotMA(res, ylim=c(-2,2))
+plotMA(resLFC, ylim=c(-2,2))
 
 # Two forms of normalization to do the plotting with
 vsd <- vst(dds, blind=FALSE)
