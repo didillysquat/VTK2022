@@ -367,8 +367,6 @@ You'll be working with R to analyze the outputs of the scRNA-seq data analysis. 
 Alternatively you can run R on the computation server (where it is already installed). But you'll likely want to connect to it using [Visual Studio Code](https://code.visualstudio.com/download). So install this on your local machine and install the R extension and the SSH extension.
 ## Part 11: Running cellranger bamtofastq
 
-TODO incorporate down sampling into this. If the students can down sample then they can work with their own sets of files and fully develop a Nextflow pipeline.
-
 The processing of single cell RNA-seq data differs from that of bulk RNA-seq data with regards to the programs that are used to process it. However, many of the underlying principles (i.e. mapping and counting) are shared between bulk and single cell RNA-seq.
 
 There are multiple ways to prepare single cell RNA-seq libraries. One popular way is to use the [Chromium controller from 10X Genomics](https://www.10xgenomics.com/instruments/chromium-family?utm_medium=search&utm_source=google&utm_campaign=sem-goog-2022-website-page-ra_g-chromium-brand-emea&useroffertype=website-page&userresearcharea=ra_g&userregion=emea&userrecipient=customer&usercampaignid=7011P000001mDXwQAM&gclid=Cj0KCQiA-JacBhC0ARIsAIxybyNyz7PZA_xjMRPViiRdmhkQQ2tuiga0crSjwBUrNtm5jJnddngIDbQaAlUiEALw_wcB&gclsrc=aw.ds).
